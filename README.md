@@ -11,28 +11,27 @@ another service.
 
 ## Steps
 
-Make sure you have go installed.
+Make sure you have go installed:
 
     brew install go
-
-or
 
     $ go version
     go version go1.22.2 darwin/arm64
 
-Then create a new module
+Then create a new module:
 
     $ mkdir mkdir go-kafka-http-example
     $ cd go-kafka-http-example
     $ go mod init kafka-http-example
     go: creating new go.mod: module kafka-http-example
 
-Then we install some dependencies:
+Then install some dependencies:
 
     go get -u github.com/confluentinc/confluent-kafka-go/v2/kafka
     go get -u go.uber.org/zap
 
-With this and the code in `main.go` you already have set everything up we need:
+With this and the code in `main.go` you already have set everything up that is
+needed:
 
     $ ls -1
     go.mod

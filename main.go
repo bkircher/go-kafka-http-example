@@ -42,9 +42,7 @@ func main() {
 		} else {
 			// Log the error with structured logging
 			logger.Error("Consumer error",
-				zap.Error(err),
-				zap.String("topic", *msg.TopicPartition.Topic),
-				zap.Int32("partition", msg.TopicPartition.Partition))
+				zap.Error(err))
 		}
 	}
 
