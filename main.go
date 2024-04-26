@@ -36,7 +36,8 @@ func main() {
 		if err == nil {
 			logger.Info("Received message",
 				zap.String("topic", *msg.TopicPartition.Topic),
-				zap.Binary("value", msg.Value),
+				zap.ByteString("key", msg.Key),
+				zap.ByteString("value", msg.Value),
 				zap.Int32("partition", msg.TopicPartition.Partition),
 				zap.Int64("offset", int64(msg.TopicPartition.Offset)))
 		} else {

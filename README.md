@@ -44,13 +44,8 @@ Then you do
 
 And dang, you get a binary.
 
-    $ ./kafka-http-example
-    %3|1713627093.757|FAIL|rdkafka#consumer-1| [thrd:localhost:9092/bootstrap]: localhost:9092/bootstrap: Connect to ipv4#127.0.0.1:9092 failed: Connection refused (after 2ms in state CONNECT)
-    panic: runtime error: invalid memory address or nil pointer dereference
-    [signal SIGSEGV: segmentation violation code=0x2 addr=0x0 pc=0x1044fba1c]
-
-    goroutine 1 [running]:
-    main.main()
-            /Users/KircherB/src/go-kafka-http-example/main.go:46 +0x42c
-
 Alright, lets add a Kafka broker to the story.
+
+    docker-compose up
+
+And produce message while reading them.
