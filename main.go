@@ -13,12 +13,15 @@ func main() {
 	}
 	defer logger.Sync() // Flushes buffer, if any
 
+	config := kafka.ConfigMap{
+		"bootstrap.servers":  "localhost:9092",
+		"group.id":           "my-consumer-group",
+		"auto.offset.reset":  "earliest",
+		"enable.auto.commit": false,
+	}
+
 	// Create Consumer instance
-	c, err := kafka.NewConsumer(&kafka.ConfigMap{
-		"bootstrap.servers": "localhost:9092",
-		"group.id":          "my-consumer-group",
-		"auto.offset.reset": "earliest",
-	})
+	c, err := kafka.NewConsumer(&config)
 
 	if err != nil {
 		logger.Fatal("Failed to create consumer", zap.Error(err))
