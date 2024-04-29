@@ -22,10 +22,10 @@ func main() {
 
 	// Create Consumer instance
 	c, err := kafka.NewConsumer(&config)
-
 	if err != nil {
 		logger.Fatal("Failed to create consumer", zap.Error(err))
 	}
+	defer c.Close()
 
 	// Subscribe to topic
 	err = c.SubscribeTopics([]string{"my-topic"}, nil)
@@ -49,6 +49,4 @@ func main() {
 				zap.Error(err))
 		}
 	}
-
-	// c.Close()
 }
