@@ -1,6 +1,11 @@
 package main
 
 import (
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"go.uber.org/zap"
 )
@@ -12,6 +17,17 @@ func main() {
 		panic(err)
 	}
 	defer logger.Sync() // Flushes buffer, if any
+
+	sigs := make(chan os.Signal, 1)
+	stop := make(chan struct{}, 1) // Channel to stop reading messages
+
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+
+	go func() {
+		sig := <-sigs
+		logger.Info("Received signal", zap.String("signal", sig.String()))
+		close(stop)
+	}()
 
 	config := kafka.ConfigMap{
 		"bootstrap.servers":  "localhost:9092",
@@ -35,18 +51,23 @@ func main() {
 
 	// Process messages
 	for {
-		msg, err := c.ReadMessage(-1)
-		if err == nil {
-			logger.Info("Received message",
-				zap.String("topic", *msg.TopicPartition.Topic),
-				zap.ByteString("key", msg.Key),
-				zap.ByteString("value", msg.Value),
-				zap.Int32("partition", msg.TopicPartition.Partition),
-				zap.Int64("offset", int64(msg.TopicPartition.Offset)))
-		} else {
-			// Log the error with structured logging
-			logger.Error("Consumer error",
-				zap.Error(err))
+		select {
+		case <-stop:
+			logger.Info("Stopping consumer")
+			return
+		default:
+			msg, err := c.ReadMessage(time.Second)
+			if err == nil {
+				logger.Debug("Received message",
+					zap.String("topic", *msg.TopicPartition.Topic),
+					zap.ByteString("key", msg.Key),
+					zap.ByteString("value", msg.Value),
+					zap.Int32("partition", msg.TopicPartition.Partition),
+					zap.Int64("offset", int64(msg.TopicPartition.Offset)))
+			} else {
+				logger.Error("Consumer error",
+					zap.Error(err))
+			}
 		}
 	}
 }
