@@ -48,4 +48,28 @@ Alright, lets add a Kafka broker to the story.
 
     docker-compose up
 
-And produce message while reading them.
+Wait until the broker has finished starting. Then create a topic:
+
+    $ docker exec -it broker bash -c '/bin/kafka-topics --bootstrap-server broker:29092 --create --topic my-topic --partitions 3 --replication-factor 1 --config retention.ms=3600000'
+    Created topic my-topic.
+
+Run our little consumer program:
+
+    ./kafka-http-example
+
+And start produce some messages in a second terminal:
+
+    $ docker exec -it broker bash -c '/bin/kafka-console-producer --broker-list broker:29092 --topic my-topic'
+    >Hello
+    >Say something nice
+
+Which gives us:
+
+    $ ./kafka-http-example
+    {"level":"info","ts":1714407627.183806,"caller":"go-kafka-http-example/main.go:40","msg":"Received message","topic":"my-topic","key":"","value":"Hello","partition":1,"offset":0}
+    {"level":"info","ts":1714407631.0890791,"caller":"go-kafka-http-example/main.go:40","msg":"Received message","topic":"my-topic","key":"","value":"Say something nice","partition":1,"offset":1}
+
+## Links
+
+- Kafka Go Client library documentation:
+  [https://docs.confluent.io/kafka-clients/go/current/overview.html](https://docs.confluent.io/kafka-clients/go/current/overview.html)
