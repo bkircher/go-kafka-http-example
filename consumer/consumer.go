@@ -38,7 +38,7 @@ func (kc *KafkaConsumer) Consume() {
 	for {
 		select {
 		case <-kc.ctx.Done():
-			kc.logger.Info("Stopping consumer…")
+			kc.logger.Debug("Stopping consumer…")
 			kc.consumer.Close()
 			return
 		default:

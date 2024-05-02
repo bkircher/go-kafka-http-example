@@ -28,7 +28,7 @@ func Run(cfg *config.Config) {
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 	go func() {
 		<-sigs
-		logger.Info("Shutdown signal received")
+		logger.Debug("Shutdown signal received")
 		cons.Stop()
 	}()
 
