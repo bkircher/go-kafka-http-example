@@ -1,8 +1,6 @@
 package consumer
 
 import (
-	"time"
-
 	"context"
 
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
@@ -17,7 +15,6 @@ type KafkaConsumer struct {
 }
 
 func NewKafkaConsumer(topics []string, cfg *kafka.ConfigMap, logger *zap.Logger) (*KafkaConsumer, error) {
-
 	c, err := kafka.NewConsumer(cfg)
 	if err != nil {
 		logger.Fatal("Failed to create consumer", zap.Error(err))
@@ -37,38 +34,36 @@ func NewKafkaConsumer(topics []string, cfg *kafka.ConfigMap, logger *zap.Logger)
 	}, nil
 }
 
-func (c *KafkaConsumer) Consume() {
-	go func() {
-		for {
-			select {
-			case <-c.ctx.Done():
-				c.logger.Info("Stopping consumer…")
-				c.consumer.Close()
-				return
-			default:
-				ev := c.consumer.Poll(int(time.Millisecond * 50))
-				if ev == nil {
-					continue
-				}
+func (kc *KafkaConsumer) Consume() {
+	for {
+		select {
+		case <-kc.ctx.Done():
+			kc.logger.Info("Stopping consumer…")
+			kc.consumer.Close()
+			return
+		default:
+			ev := kc.consumer.Poll(100)
+			if ev == nil {
+				continue
+			}
 
-				switch e := ev.(type) {
-				case *kafka.Message:
-					c.logger.Debug("Received message",
-						zap.String("topic", *e.TopicPartition.Topic),
-						zap.ByteString("key", e.Key),
-						zap.ByteString("value", e.Value),
-						zap.Int32("partition", e.TopicPartition.Partition),
-						zap.Int64("offset", int64(e.TopicPartition.Offset)))
+			switch e := ev.(type) {
+			case *kafka.Message:
+				kc.logger.Debug("Received message",
+					zap.String("topic", *e.TopicPartition.Topic),
+					zap.ByteString("key", e.Key),
+					zap.ByteString("value", e.Value),
+					zap.Int32("partition", e.TopicPartition.Partition),
+					zap.Int64("offset", int64(e.TopicPartition.Offset)))
 
-				case kafka.Error:
-					c.logger.Error("Consumer error",
-						zap.Error(e))
-				}
+			case kafka.Error:
+				kc.logger.Error("Consumer error",
+					zap.Error(e))
 			}
 		}
-	}()
+	}
 }
 
-func (c *KafkaConsumer) Stop() {
-	c.cancel()
+func (kc *KafkaConsumer) Stop() {
+	kc.cancel()
 }
