@@ -8,6 +8,7 @@
       "name": "Debug service",
       "type": "go",
       "request": "launch",
+      "preLaunchTask": "Build executable",
       "mode": "auto",
       "program": "${workspaceFolder}",
       "env": {
