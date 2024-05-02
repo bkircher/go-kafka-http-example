@@ -39,7 +39,9 @@ func (kc *KafkaConsumer) Consume() {
 		select {
 		case <-kc.ctx.Done():
 			kc.logger.Debug("Stopping consumer…")
-			kc.consumer.Close()
+			if err := kc.consumer.Close(); err != nil {
+				kc.logger.Error("Failed to close consumer", zap.Error(err))
+			}
 			return
 		default:
 			ev := kc.consumer.Poll(100)
