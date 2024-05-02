@@ -17,7 +17,7 @@ func New() (*Config, error) {
 	consumerCfg := &kafka.ConfigMap{
 		"bootstrap.servers":  "localhost:9092",
 		"group.id":           "my-consumer-group",
-		"auto.offset.reset":  "earliest",
+		"auto.offset.reset":  "latest",
 		"enable.auto.commit": false,
 	}
 
