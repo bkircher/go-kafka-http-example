@@ -72,4 +72,5 @@ Which gives us:
 ## Links
 
 - Kafka Go Client library documentation:
-  [https://docs.confluent.io/kafka-clients/go/current/overview.html](https://docs.confluent.io/kafka-clients/go/current/overview.html)
+  [docs.confluent.io/kafka-clients/go/current/overview.html](https://docs.confluent.io/kafka-clients/go/current/overview.html)
+- librdkafka configuration options: [github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md](https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md)
