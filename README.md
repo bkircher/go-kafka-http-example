@@ -7,13 +7,13 @@ another service.
 
 - Confluent's Apache Kafka Go client:
   <https://github.com/confluentinc/confluent-kafka-go>
-- Uber's fast, structured, leveled Go logger: <https://github.com/uber-go/zap>
+- Uber's fast, structured Go logger: <https://github.com/uber-go/zap>
 
 ## Steps
 
 Make sure you have go installed:
 
-    brew install go
+    $ brew install go
 
     $ go version
     go version go1.22.2 darwin/arm64
@@ -69,8 +69,14 @@ Which gives us:
     {"level":"info","ts":1714407627.183806,"caller":"go-kafka-http-example/main.go:40","msg":"Received message","topic":"my-topic","key":"","value":"Hello","partition":1,"offset":0}
     {"level":"info","ts":1714407631.0890791,"caller":"go-kafka-http-example/main.go:40","msg":"Received message","topic":"my-topic","key":"","value":"Say something nice","partition":1,"offset":1}
 
+Now, lets run the HTTP server:
+
+    $ deno run --allow-net server.ts
+    Listening on http://localhost:4505/
+
 ## Links
 
 - Kafka Go Client library documentation:
   [docs.confluent.io/kafka-clients/go/current/overview.html](https://docs.confluent.io/kafka-clients/go/current/overview.html)
-- librdkafka configuration options: [github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md](https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md)
+- librdkafka configuration options:
+  [github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md](https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md)
